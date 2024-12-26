@@ -1,33 +1,31 @@
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
-import time
+import torch
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
-model_name = "gpt2"
+# Init Tokenizer from Hugging Face Transformers library
+tokenizer = T5Tokenizer.from_pretrained('t5-small', legacy=False)
 
-pipe = pipeline("text-generation", model=model_name)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+# load model
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = T5ForConditionalGeneration.from_pretrained('cssupport/t5-small-awesome-text-to-sql')
+model = model.to(device)
+model.eval()
 
-tokenizer.pad_token = tokenizer.eos_token
-
-def generate_query(prompt, max_length=100):
-    inputs = tokenizer(prompt, return_tensors="pt", padding=True)
-    attention_mask = inputs['attention_mask']
+def generate_sql(input_prompt):
+    inputs = tokenizer(input_prompt, padding=True, truncation=True, return_tensors="pt").to(device)
     
-    outputs = model.generate(
-        inputs["input_ids"],
-        attention_mask=attention_mask,
-        max_length=max_length,
-        num_return_sequences=1,
-        do_sample=True,
-        top_k=50,
-        top_p=0.95,
-        pad_token_id=tokenizer.eos_token_id
-    )
-    query = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return query
+    with torch.no_grad():
+        outputs = model.generate(**inputs, max_length=512)
+    generated_sql = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    
+    return generated_sql
 
-# Exemplo de uso
-prompt = ("Write a SQL query to find all users who signed up in the last week. The table is named 'users' and has columns 'id', 'name', 'email', and 'signup_date'. The query should select 'id', 'name', and 'email' of the users who signed up in the last week.")
-query = generate_query(prompt)
+# database schema
+schema = "CREATE TABLE student_course_attendance (student_id VARCHAR); CREATE TABLE students (student_id VARCHAR)"
+# query to generate SQL
+query = "count the number of students who attended the course"
 
-print(query)
+input_prompt = "tables:\n" + schema + "\nquery:\n" + query
+
+generated_sql = generate_sql(input_prompt)
+
+print(f"The generated SQL query is: {generated_sql}")
