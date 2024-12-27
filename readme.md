@@ -26,17 +26,12 @@ e armazena em cache
  A variavel "schema" é um snippet do "create" das tabelas, apenas para nivel de contexto
  - como por exemplo
  ```python
-    schema = """
-    CREATE TABLE employees (
-        id INT PRIMARY KEY,
-        name VARCHAR(100),
-        salary DECIMAL(10, 2)
-    );
-    CREATE TABLE departments (
-        id INT PRIMARY KEY,
-        name VARCHAR(100)
-    );
-"""
+     ```python
+     schema = """
+        CREATE TABLE student_course_attendance (student_id VARCHAR); 
+        CREATE TABLE students (student_id VARCHAR);
+     """
+     ```
  ```
  A variavel "Query" é simplismente o objetivo da query a ser produzida
  - Como por exemplo
