@@ -1,4 +1,4 @@
-# Gera querys apartir de linguagem natural
+# Gera querys a partir de linguagem natural
 Um projeto de teste para praticar o uso de IA com Querys
 
 # Modelo usado
