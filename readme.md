@@ -17,14 +17,13 @@ sh run.sh
 ```
 Na primeira execução ele faz o download no modelo
 e armazena em cache
-Faça um post com o seguinte body:
+
+# Modo de uso (temporario)
+ Faça uma requisição post com o seguinte body (usando postman ou insomnia):
 ```
     "schema": "CREATE TABLE student_course_attendance (student_id VARCHAR); CREATE TABLE students (student_id VARCHAR);",
     "query": "count the number of students who attended the course"
 ```
-
-
-# Modo de uso (temporario)
  O modelo recebe um input unico em forma de string no seguinte formato
  ```c
  "tables:\n" + schema + "\nquery:\n" + query
