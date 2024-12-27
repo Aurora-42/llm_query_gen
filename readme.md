@@ -19,7 +19,8 @@ Na primeira execução ele faz o download no modelo
 e armazena em cache
 
 # Modo de uso (temporario)
- Faça uma requisição post com o seguinte body (usando postman ou insomnia):
+ Faça uma requisição post com o seguinte body (usando postman ou insomnia)
+ no Endpoint /gen_sql
 ```
     "schema": "CREATE TABLE student_course_attendance (student_id VARCHAR); CREATE TABLE students (student_id VARCHAR);",
     "query": "count the number of students who attended the course"
