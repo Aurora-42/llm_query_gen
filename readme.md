@@ -2,7 +2,7 @@
 Um projeto de teste para praticar o uso de IA com Querys
 
 # Modelo usado
-  cssupport t5-small-awesome-text-to-sql 
+  [T5-satts](https://huggingface.co/cssupport/t5-small-awesome-text-to-sql)
 
 # Instalação
 ``` shell
