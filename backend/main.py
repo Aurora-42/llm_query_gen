@@ -1,5 +1,8 @@
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
 
 def init_tokenizer(model_name: str = 't5-small') -> T5Tokenizer:
     return T5Tokenizer.from_pretrained(model_name, legacy=False)
@@ -11,7 +14,7 @@ def load_model(model_name='cssupport/t5-small-awesome-text-to-sql'):
     model.eval()
     return model, device
 
-def generate_sql(model: T5ForConditionalGeneration, tokenizer: T5Tokenizer, device: torch.device, input_prompt: str) -> str:
+def gen_sql(model: T5ForConditionalGeneration, tokenizer: T5Tokenizer, device: torch.device, input_prompt: str) -> str:
     inputs = tokenizer(input_prompt, padding=True, truncation=True, return_tensors="pt").to(device)
     
     with torch.no_grad():
@@ -20,19 +23,18 @@ def generate_sql(model: T5ForConditionalGeneration, tokenizer: T5Tokenizer, devi
     
     return generated_sql
 
-def main():
-    # Initialize tokenizer and model
-    tokenizer = init_tokenizer()
-    model, device = load_model()
+tokenizer = init_tokenizer()
+model, device = load_model()
 
-    # Database schema and query
-    schema = "CREATE TABLE student_course_attendance (student_id VARCHAR); CREATE TABLE students (student_id VARCHAR)"
-    query = "count the number of students who attended the course"
-    input_prompt = "tables:\n" + schema + "\nquery:\n" + query
-
-    # Generate SQL
-    generated_sql = generate_sql(model, tokenizer, device, input_prompt)
-    print(f"The generated SQL query is: {generated_sql}")
+@app.route('/gen_sql', methods=['POST'])
+def gen_sql_endpoint():
+    data = request.json
+    schema = data.get('schema')
+    query = data.get('query')
+    input_prompt = f"tables:\n{schema}\nquery:\n{query}"
+    
+    generated_sql = gen_sql(model, tokenizer, device, input_prompt)
+    return jsonify({"generated_sql": generated_sql})
 
 if __name__ == "__main__":
-    main()
+    app.run(host='0.0.0.0', port=5000)
