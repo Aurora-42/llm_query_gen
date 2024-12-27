@@ -15,6 +15,8 @@ pip install -r requirements.txt
 ``` shell
 sh run.sh
 ```
+Na primeira execução ele faz o download no modelo
+e armazena em cache
 
 # Modo de uso (temporario)
  O modelo recebe um input unico em forma de string no seguinte formato
@@ -40,4 +42,8 @@ sh run.sh
  - Como por exemplo
  ```python
     query = "count the number of students who attended the course"
+```
+O Resultado deve ser:
+``` shell
+    SELECT COUNT(*) FROM students AS T1 JOIN student_course_attendance AS T2 ON T1.student_id = T2.student_id GROUP BY T1.student_id
 ```
