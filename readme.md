@@ -13,6 +13,9 @@ pip install -r requirements.txt
 
 # Como executar o projeto
 ``` shell
+# execute o seguinte comando e cole o TOKEN de acesso do hugging face
+huggingface-cli login
+
 sh run.sh
 ```
 Na primeira execução ele faz o download no modelo
