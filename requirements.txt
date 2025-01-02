@@ -2,3 +2,6 @@ sentencepiece
 transformers
 protobuf
 Flask
+swagger
+flask-swagger-ui
+flask-cors
