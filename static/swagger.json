@@ -1,0 +1,62 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "build a query",
+      "version": "1.0.0",
+      "title": "llm_query_gen",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      }
+    ],
+    "paths": {
+      "/gen_sql": {
+        "post": {
+          "summary": "build a query",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gen_sql"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "query built",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/gen_sql"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "gen_sql": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "type": "string",
+              "enum": ["CREATE TABLE student_course_attendance (student_id VARCHAR); CREATE TABLE students (student_id VARCHAR);"]
+            },
+            "query": {
+              "type": "string",
+              "enum": ["count the number of students who attended the course"]
+            }
+          }
+        }
+      }
+    }
+}

@@ -1,8 +1,26 @@
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
+# Swagger UI
+SWAGGER_URL = '/swagger'
+API_URL = '../../static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "llm_query_gen"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+# End Swagger UI
 
 def init_tokenizer(model_name: str = 't5-small') -> T5Tokenizer:
     return T5Tokenizer.from_pretrained(model_name, legacy=False)
