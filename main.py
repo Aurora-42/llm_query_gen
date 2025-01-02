@@ -39,9 +39,9 @@ def gen_sql(model: T5ForConditionalGeneration, tokenizer: T5Tokenizer, device: t
     
     with torch.no_grad():
         outputs = model.generate(**inputs, max_length=512)
-    generated_sql = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    query = tokenizer.decode(outputs[0], skip_special_tokens=True)
     
-    return generated_sql
+    return query
 
 tokenizer = init_tokenizer()
 model, device = load_model()
@@ -53,8 +53,8 @@ def gen_sql_endpoint():
     query = data.get('query')
     input_prompt = f"tables:\n{schema}\nquery:\n{query}"
     
-    generated_sql = gen_sql(model, tokenizer, device, input_prompt)
-    return jsonify({"generated_sql": generated_sql})
+    query = gen_sql(model, tokenizer, device, input_prompt)
+    return jsonify({"query": query})
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

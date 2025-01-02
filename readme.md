@@ -16,11 +16,15 @@ pip install -r requirements.txt
 # execute o seguinte comando e cole o TOKEN de acesso do hugging face
 huggingface-cli login
 
-sh run.sh
+python3 main.py
 ```
 Na primeira execução ele faz o download no modelo
 e armazena em cache
 
+# Modo de uso (Atual)
+    Abra o navegador em http://localhost:5000/swagger
+    Vá em "Try it out" para executar um teste da api
+ 
 # Modo de uso (temporario)
  Faça uma requisição post com o seguinte body (usando postman ou insomnia)
  no Endpoint /gen_sql
