@@ -1,3 +1,4 @@
+import os
 import torch
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 from flask import Flask, request, jsonify, send_from_directory
@@ -24,12 +25,14 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 # End Swagger UI
 
+huggingface_token = os.getenv("HUGGINGFACE_API_TOKEN")
+
 def init_tokenizer(model_name: str = 't5-small') -> T5Tokenizer:
-    return T5Tokenizer.from_pretrained(model_name, legacy=False)
+    return T5Tokenizer.from_pretrained(model_name, legacy=False, use_auth_token=huggingface_token)
 
 def load_model(model_name='cssupport/t5-small-awesome-text-to-sql'):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = T5ForConditionalGeneration.from_pretrained(model_name)
+    model = T5ForConditionalGeneration.from_pretrained(model_name, use_auth_token=huggingface_token)
     model = model.to(device)
     model.eval()
     return model, device
