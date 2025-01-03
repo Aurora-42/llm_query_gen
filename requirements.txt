@@ -1,7 +1,7 @@
-sentencepiece
 transformers
-protobuf
-Flask
+flask
 swagger
+sentencepiece
 flask-swagger-ui
-flask-cors
+Flask-cors
+protobuf
